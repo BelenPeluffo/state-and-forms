@@ -13,6 +13,7 @@ import LibroMatrix from "./pages/LibroMatrix";
 import { CurricularBoxProvider, LibroMatrixProvider } from "./contexts";
 import CurricularBox from "./pages/CurricularBox";
 import FormikAndYup from "./pages/FormikAndYup";
+import TableFormProvider from "./contexts/TableForm/TableForm.provider";
 import TableForm from "./pages/TableForm";
 
 const router = createBrowserRouter([{ path: "*", element: <Root /> }]);
@@ -41,7 +42,14 @@ function Root() {
           }
         />
         <Route path="formik-and-yup" element={<FormikAndYup />} />
-        <Route path="/table-form" element={<TableForm />} />
+        <Route
+          path="/table-form"
+          element={
+            <TableFormProvider>
+              <TableForm />
+            </TableFormProvider>
+          }
+        />
         <Route path="*" element={<ErrorPage />} />
       </Route>
     </Routes>
