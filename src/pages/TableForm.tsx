@@ -31,7 +31,7 @@ const TableForm = () => {
     getCoreRowModel: getCoreRowModel(),
   });
   const HEADERS = tableManager.getHeaderGroups()[0].headers;
-  console.log("HEADERS?", HEADERS);
+  const ROWS = tableManager.getRowModel().rows;
 
   const updateColumnConfig = () => {
     // if (columnConfig && columnConfig.length > 0) {
@@ -55,13 +55,28 @@ const TableForm = () => {
             <TableRow>
               {HEADERS.map((header) => (
                 <TableCell key={header.id}>
-                  {header.column.columnDef.header as string}
+                  {/* {header.column.columnDef.header as string}
+                   */}
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.length > 0 ? "Hallo" : "No hay datos para mostrar"}
+            {ROWS.map((row) => (
+              <TableRow>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
