@@ -19,7 +19,11 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { TABLE_STRUCTURE_CONFIG } from "../constants/tableFormConfig";
+import {
+  TABLE_FORM_CELL_CONFIG,
+  TABLE_STRUCTURE_CONFIG,
+} from "../constants/tableFormConfig";
+import TableFormAutocomplete from "../components/TableFormAutocomplete";
 
 const TableForm = () => {
   const { options, rows } = useContext(TableFormContext) as TableFormState;
@@ -32,25 +36,26 @@ const TableForm = () => {
     setUpdatedConfig,
     getValues,
   } = useTableForm();
-  console.log("TableForm > updatedConfig", updatedConfig);
-  const COLUMN_CONFIG = TABLE_STRUCTURE_CONFIG.map((column, index) => ({
+  const COLUMN_CONFIG = TABLE_FORM_CELL_CONFIG.map((column) => ({
     ...column,
-    // Cell: ({ row }: { row: any }) => {
-    //   setValue(`rows.${index}.${column.id as keyof Row}`, row.getValue());
-    //   return <Typography>{row.getValue()}</Typography>; // row.getValue();
-    // },
+    control,
+    options:
+      column.type === "autocomplete" && options && options.length > 0
+        ? options
+        : undefined,
+  }));
+  const TABLE_CONFIG = TABLE_STRUCTURE_CONFIG.map((column, index) => ({
+    ...column,
     cell: ({ row }: { row: any }) => {
-      console.log("row?", row);
-      console.log("row.getParentRow()?", row.getParentRow());
-      return (
+      return COLUMN_CONFIG[index].type === "autocomplete" ? (
+        <TableFormAutocomplete config={COLUMN_CONFIG[index]} />
+      ) : (
         <Typography variant="h1">{row.renderValue(column.id)}</Typography>
       );
     },
   }));
-  console.log("TableForm > COLUMN_CONFIG", COLUMN_CONFIG);
-  console.log("getValues?", getValues().rows);
   const tableManager = useReactTable({
-    columns: COLUMN_CONFIG,
+    columns: TABLE_CONFIG,
     data: rows,
     getCoreRowModel: getCoreRowModel(),
   });

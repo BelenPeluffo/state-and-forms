@@ -34,11 +34,5 @@ export const TABLE_STRUCTURE_CONFIG = TABLE_FORM_CELL_CONFIG.map((column) =>
   columnHelper.accessor((row) => row[column.name], {
     id: column.name,
     header: column.label,
-    // cell: ({ row }: { row: any }) => {
-    //   console.log("row?", row);
-    //   console.log("column.name?", column.name);
-    //   console.log("row.renderValue(column.name)", row.renderValue(column.name));
-    //   return <Typography variant="h1">{row.renderValue(column.name)}</Typography>;
-    // },
   })
 );
