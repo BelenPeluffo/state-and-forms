@@ -62,9 +62,6 @@ const TableForm = () => {
   const HEADERS = tableManager.getHeaderGroups()[0].headers;
   const ROWS = tableManager.getRowModel().rows;
 
-  useEffect(() => {
-    // updateColumnConfig();
-  });
   return (
     <form>
       <TableContainer>
@@ -73,8 +70,6 @@ const TableForm = () => {
             <TableRow>
               {HEADERS.map((header) => (
                 <TableCell key={header.id}>
-                  {/* {header.column.columnDef.header as string}
-                   */}
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -88,11 +83,6 @@ const TableForm = () => {
           <TableBody>
             {ROWS.map((row) => (
               <TableRow key={row.id}>
-                {/* {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))} */}
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
