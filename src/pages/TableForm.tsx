@@ -8,7 +8,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import {
   type TableFormState,
   TableFormContext,
@@ -24,18 +24,12 @@ import {
   TABLE_STRUCTURE_CONFIG,
 } from "../constants/tableFormConfig";
 import TableFormAutocomplete from "../components/TableFormAutocomplete";
+import { SubmitHandler } from "react-hook-form";
+import { TableForm as TableInterface } from "../models/Rows";
 
 const TableForm = () => {
   const { options, rows } = useContext(TableFormContext) as TableFormState;
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    // columnConfig,
-    updatedConfig,
-    setUpdatedConfig,
-    getValues,
-  } = useTableForm();
+  const { control, handleSubmit, setValue, getValues } = useTableForm();
   const COLUMN_CONFIG = TABLE_FORM_CELL_CONFIG.map((column) => ({
     ...column,
     control,
@@ -62,8 +56,14 @@ const TableForm = () => {
   const HEADERS = tableManager.getHeaderGroups()[0].headers;
   const ROWS = tableManager.getRowModel().rows;
 
+  const onSubmit: SubmitHandler<TableInterface> = () => {
+    console.log("submiting... > values?", getValues().rows);
+  };
+
+  console.log("getValues?", getValues().rows);
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <TableContainer>
         <Table>
           <TableHead>
@@ -93,6 +93,7 @@ const TableForm = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <button type="submit">Submit</button>
     </form>
   );
 };

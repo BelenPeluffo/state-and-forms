@@ -1,6 +1,8 @@
 export interface Row {
+  id: number;
   name: string;
-  zodiacSign: number;
+  sunSign: number;
+  moonSign: number;
 }
 
 export interface TableForm {
