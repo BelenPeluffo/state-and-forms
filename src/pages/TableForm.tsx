@@ -41,6 +41,7 @@ const TableForm = () => {
   const TABLE_CONFIG = TABLE_STRUCTURE_CONFIG.map((column, index) => ({
     ...column,
     cell: ({ row }: { row: any }) => {
+      setValue(`rows.${row.id}.${column.id}`, row.getValue(column.id));
       return COLUMN_CONFIG[index].type === "autocomplete" ? (
         <TableFormAutocomplete config={COLUMN_CONFIG[index]} />
       ) : (

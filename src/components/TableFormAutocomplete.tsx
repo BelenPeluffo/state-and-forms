@@ -8,9 +8,23 @@ import { CellConfig } from "../constants/tableFormConfig";
 import { ReactElement } from "react";
 import { TableForm } from "../models/Rows";
 import { Autocomplete, TextField } from "@mui/material";
+import { OptionType } from "./CustomizableAutocomplete";
 
-const TableFormAutocomplete = ({ config }: { config: CellConfig }) => {
-  const { control, name, options, rowId } = config;
+const calcAutocompleteValue = (
+  value: number & OptionType,
+  options: Array<OptionType>
+) => {
+  return typeof value !== "number"
+    ? value
+    : options.filter((option) => option.id === value)[0];
+};
+
+const TableFormAutocomplete = ({
+  config,
+}: {
+  config: CellConfig;
+}) => {
+  const { control, name, options, rowId, label } = config;
 
   return (
     <Controller
@@ -19,17 +33,8 @@ const TableFormAutocomplete = ({ config }: { config: CellConfig }) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         field: { onChange, onBlur, ...rest },
         fieldState,
-        formState,
+        formState: { isLoading },
       }: {
-        // field: ControllerRenderProps<
-        //   TableForm,
-        //   //   keyof TableForm
-        //   // | "rows"
-        //   // | `rows.${number}`
-        //   // | `rows.${number}.name`
-        //   | `rows.${number}.sunSign`
-        //   | `rows.${number}.moonSign`
-        // >;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         field: ControllerRenderProps<TableForm, any>;
         fieldState: ControllerFieldState;
@@ -43,7 +48,7 @@ const TableFormAutocomplete = ({ config }: { config: CellConfig }) => {
               }
               return option.value;
             }}
-            renderInput={(params) => <TextField {...params} label="Movie" />}
+            renderInput={(params) => <TextField {...params} label={label} />}
             renderOption={(props, option) => (
               <li {...props} key={option.id}>
                 {option.label || option.value}
@@ -52,11 +57,16 @@ const TableFormAutocomplete = ({ config }: { config: CellConfig }) => {
             options={options || []}
             {...rest}
             value={
-              rest.value === null
-                ? null
-                : rest.value === undefined
-                ? rest.value
-                : options?.find((option) => option.id === rest.value)
+              !isLoading &&
+              rest.value !== undefined &&
+              rest.value !== null &&
+              options &&
+              options.length > 0
+                ? calcAutocompleteValue(
+                    rest.value as number & OptionType,
+                    options
+                  )
+                : null
             }
             onChange={(_, newValue) => {
               console.log(newValue);
