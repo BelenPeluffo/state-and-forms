@@ -6,11 +6,12 @@ import {
 } from "react-hook-form";
 import { CellConfig } from "../constants/tableFormConfig";
 import { ReactElement } from "react";
-import { Row, TableForm } from "../models/Rows";
+import { TableForm } from "../models/Rows";
 import { Autocomplete, TextField } from "@mui/material";
 
 const TableFormAutocomplete = ({ config }: { config: CellConfig }) => {
-  const { control, name, options } = config;
+  const { control, name, options, rowId } = config;
+
   return (
     <Controller
       control={control}
@@ -20,14 +21,17 @@ const TableFormAutocomplete = ({ config }: { config: CellConfig }) => {
         fieldState,
         formState,
       }: {
-        field: ControllerRenderProps<
-          TableForm,
-          //   keyof TableForm
-          | "rows"
-          | `rows.${number}`
-          | `rows.${number}.name`
-          | `rows.${number}.zodiacSign`
-        >;
+        // field: ControllerRenderProps<
+        //   TableForm,
+        //   //   keyof TableForm
+        //   // | "rows"
+        //   // | `rows.${number}`
+        //   // | `rows.${number}.name`
+        //   | `rows.${number}.sunSign`
+        //   | `rows.${number}.moonSign`
+        // >;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        field: ControllerRenderProps<TableForm, any>;
         fieldState: ControllerFieldState;
         formState: UseFormStateReturn<TableForm>;
       }): ReactElement => {
@@ -47,6 +51,13 @@ const TableFormAutocomplete = ({ config }: { config: CellConfig }) => {
             )}
             options={options || []}
             {...rest}
+            value={
+              rest.value === null
+                ? null
+                : rest.value === undefined
+                ? rest.value
+                : options?.find((option) => option.id === rest.value)
+            }
             onChange={(_, newValue) => {
               console.log(newValue);
               onChange(newValue);
@@ -54,7 +65,7 @@ const TableFormAutocomplete = ({ config }: { config: CellConfig }) => {
           />
         );
       }}
-      name={"rows"}
+      name={`rows.${rowId}.${name}`}
     />
   );
 };
