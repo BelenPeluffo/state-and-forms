@@ -8,11 +8,15 @@ const TableFormProvider = ({ children }: { children: React.ReactNode }) => {
   const rows: Row[] = [
     {
       name: "Row 1",
-      zodiacSign: 1,
+      sunSign: 1,
+      moonSign: 1,
+      id: 0,
     },
     {
       name: "Row 2",
-      zodiacSign: 2,
+      sunSign: 2,
+      moonSign: 2,
+      id: 1,
     },
   ];
   console.log("Table Provider > options", options);

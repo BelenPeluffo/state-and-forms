@@ -4,12 +4,12 @@ import { FormField } from "../models/FormField";
 import { Row, TableForm } from "../models/Rows";
 import { OptionType } from "../components/CustomizableAutocomplete";
 import { Control } from "react-hook-form";
-import { Typography } from "@mui/material";
 
 export interface CellConfig extends FormField {
   name: keyof Row;
   options?: OptionType[];
   control?: Control<TableForm, keyof TableForm>;
+  rowId: number;
 }
 
 export const TABLE_FORM_CELL_CONFIG: CellConfig[] = [
@@ -18,13 +18,23 @@ export const TABLE_FORM_CELL_CONFIG: CellConfig[] = [
     label: "Nombre",
     type: "display",
     required: false,
+    rowId: 0
   },
   {
-    name: "zodiacSign",
+    name: "sunSign",
     label: "Signo solar",
     type: "autocomplete",
     placeholder: "Select your sign",
     required: true,
+    rowId: 0
+  },
+  {
+    name: "moonSign",
+    label: "Signo lunar",
+    type: "autocomplete",
+    placeholder: "Select your sign",
+    required: true,
+    rowId: 0
   },
 ];
 
